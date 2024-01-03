@@ -1,6 +1,6 @@
 import requests
 import time
-from dotenv-python import load_dotenv
+from dotenv import load_dotenv
 import os
 
 load_dotenv()
