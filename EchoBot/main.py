@@ -13,35 +13,29 @@ bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
 
 # Handler for /start command
+@dp.message(Command(commands='start'))
 async def process_start_command(message: Message):
     await message.answer(
         'Hey! I am EchoBot! Write something'
     )
 
 # Handler for /help command
+@dp.message(Command(commands='help'))
 async def process_help_command(message: Message):
     await message.answer(
         'Write something and I send you your message'
     )
 
-# Handler for photos
-async def send_photo_echo(message: Message):
-    await message.reply_photo(message.photo[0].file_id)
-
-# Handler for stickers
-async def send_sticker_echo(message: Message):
-    await message.reply_sticker(message.sticker.file_id)
-
-# Handler for any other text messages
+# Handler for any other messages
+@dp.message()
 async def send_echo(message: Message):
-    await message.reply(message.text)
-
-# Handler registration
-dp.message.register(process_start_command, Command(commands='start'))
-dp.message.register(process_help_command, Command(commands='help'))
-dp.message.register(send_photo_echo, F.photo)
-dp.message.register(send_sticker_echo, F.sticker)
-dp.message.register(send_echo)
+    try:
+        await message.send_copy(chat_id=message.chat.id)
+        print(message)
+    except TypeError:
+        await message.reply(
+            text='Update type is not support'
+        )
 
 if __name__ == '__main__':
     dp.run_polling(bot)
