@@ -8,20 +8,23 @@ API_URL = 'https://api.telegram.org/bot'
 API_CATS_URL = 'https://api.thecatapi.com/v1/images/search'
 BOT_TOKEN = os.getenv('TOKEN')
 ERROR_TEXT = 'Здесь должна быть картинка котика :('
-print(BOT_TOKEN)
-
 offset = -2
-counter = 0
+timeout = 60
+updates: dict
 cat_response: requests.Response
 cat_link: str
 
-while counter < 100:
-    print('attempt = ', counter)
-    updates = requests.get(f'{API_URL}{BOT_TOKEN}/getUpdates?offset={offset + 1 }').json()
+def do_something() -> None:
+    print('There was an update')
+
+while True:
+    start_time = time.time()
+    updates = requests.get(f'{API_URL}{BOT_TOKEN}/getUpdates?offset={offset + 1 }&timeout={timeout}').json()
 
     if updates['result']:
         for result in updates['result']:
             offset = result['update_id']
+            do_something()
             chat_id = result['message']['from']['id']
             cat_response = requests.get(API_CATS_URL)
             if cat_response.status_code == 200:
@@ -29,5 +32,6 @@ while counter < 100:
                 requests.get(f'{API_URL}{BOT_TOKEN}/sendPhoto?chat_id={chat_id}&photo={cat_link}')
             else:
                 requests.get(f'{API_URL}{BOT_TOKEN}/sendPhoto?chat_id={chat_id}&text={ERROR_TEXT}')
-    time.sleep(1)
-    counter += 1
+
+    end_time = time.time()
+    print(f'Response delay time: {end_time - start_time}')
