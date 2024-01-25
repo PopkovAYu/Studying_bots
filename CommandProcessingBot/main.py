@@ -18,6 +18,7 @@ def my_start_filter(message: Message) -> bool:
 # Handler for start command
 @dp.message(my_start_filter)
 async def process_start_command(message: Message):
+    print(message)
     await message.answer(text='This is /start command')
 
 if __name__ == '__main__':
