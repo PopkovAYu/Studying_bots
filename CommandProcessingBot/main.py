@@ -16,7 +16,7 @@ def my_start_filter(message: Message) -> bool:
 # start_check = lambda msg: msg.text == '/start'
 
 # Handler for start command
-@dp.message(start_check)
+@dp.message(my_start_filter)
 async def process_start_command(message: Message):
     await message.answer(text='This is /start command')
 
