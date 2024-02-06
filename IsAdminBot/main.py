@@ -6,12 +6,13 @@ from dotenv import load_dotenv
 
 load_dotenv()
 BOT_TOKEN = os.getenv('TOKEN')
+admin_id = os.getenv('ADMIN_ID')
 
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
 
-# Admin_ids list: 133041549 - A.Yu. Popkov, 397982111 - A. Kim
-admin_ids: list[int] = [133041549, 397982111]
+# Admin_ids list: admin_id - A.Yu. Popkov, 397982111 - A. Kim
+admin_ids: list[int] = [admin_id, 397982111]
 
 # Self-filter for admin check
 class IsAdmin(BaseFilter):
